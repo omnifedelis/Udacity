@@ -1,0 +1,28 @@
+[
+    {
+        'Name': 'Setup Debugging',
+        'ActionOnFailure': 'TERMINATE_CLUSTER',
+        'HadoopJarStep': {
+            'Jar': 'command-runner.jar',
+            'Args': ['state-pusher-script']
+        }
+    },
+    {
+        'Name': 'Copy_ETL_Script',
+        'ActionOnFailure': 'CANCEL_AND_WAIT',
+        'HadoopJarStep': {
+            'Jar': 'command-runner.jar',
+            'Args': ['aws', 's3', 'cp', 's3://garcia-capstone/script/', '/home/hadoop/', '--recursive']
+        }
+    },
+  
+    {
+        'Name': 'Main_ETL',
+        'ActionOnFailure': 'CONTINUE',
+        'HadoopJarStep': {
+            'Jar': 'command-runner.jar',
+            'Args': ['spark-submit', '/home/hadoop/script/CAP_Spark_Wrangling.py' , 's3a://garcia-capstone/input/', 's3a://garcia-capstone/output/']
+        }
+    },
+  
+]
