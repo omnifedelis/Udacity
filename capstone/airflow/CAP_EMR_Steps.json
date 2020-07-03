@@ -23,6 +23,6 @@
             'Jar': 'command-runner.jar',
             'Args': ['spark-submit', '/home/hadoop/script/<Place_Data_Wrangling_script_here>' , 's3a://<BucketName_goes_here>/input/', 's3a://<BucketName_goes_here>/output/']
         }
-    },
+    }
   
 ]
