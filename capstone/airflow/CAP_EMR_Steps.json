@@ -12,7 +12,7 @@
         'ActionOnFailure': 'CANCEL_AND_WAIT',
         'HadoopJarStep': {
             'Jar': 'command-runner.jar',
-            'Args': ['aws', 's3', 'cp', 's3://garcia-capstone/script/', '/home/hadoop/', '--recursive']
+            'Args': ['aws', 's3', 'cp', 's3://<BucketName_goes_here>/script/', '/home/hadoop/', '--recursive']
         }
     },
   
@@ -21,7 +21,7 @@
         'ActionOnFailure': 'CONTINUE',
         'HadoopJarStep': {
             'Jar': 'command-runner.jar',
-            'Args': ['spark-submit', '/home/hadoop/script/CAP_Spark_Wrangling.py' , 's3a://garcia-capstone/input/', 's3a://garcia-capstone/output/']
+            'Args': ['spark-submit', '/home/hadoop/script/<Place_Data_Wrangling_script_here>' , 's3a://<BucketName_goes_here>/input/', 's3a://<BucketName_goes_here>/output/']
         }
     },
   
