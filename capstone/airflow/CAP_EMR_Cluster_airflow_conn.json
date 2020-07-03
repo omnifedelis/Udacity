@@ -1,6 +1,6 @@
 {
   "Name": "CAP_EMR_Cluster",
-  "LogUri": "s3://aws-logs-944264041230-us-west-2",
+  "LogUri": "s3://<Log_file_path_goes_here>",
   "ReleaseLabel": "emr-5.29.0",
   "Applications": [
     {
