@@ -243,16 +243,16 @@ which are found in the dl.cfg file below.
 - Access connections and create a new aws_credentials connection (*region name can be changed according to region you choose to use for redshift*) and redshift connection like the images below:  
     
   <div align="center">
-    <img width="500" height="200" src="aws_cred.jpg">
+    <img width="500" height="500" src="aws_cred.jpg">
   </div>
   <div align="center">
-    <img width="500" height="200" src="redshift.jpg">
+    <img width="500" height="500" src="redshift.jpg">
   </div>
     
 -Next edit the EMR_Default connection by copying the json data in the CAP_EMR_Cluster_airflow_conn.json file and overwriting the info in the 'extra' space.
  
   <div align="center">
-    <img width="500" height="200" src="emr.jpg">
+    <img width="500" height="500" src="emr.jpg">
   </div>
     
 -Finally you go to the Dags page and turn Capstone_dag on and let it run until completion
