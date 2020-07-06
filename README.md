@@ -258,10 +258,5 @@ which are found in the dl.cfg file below.
 -Finally you go to the Dags page and turn Capstone_dag on and let it run until completion
 -Once the dag has finished running, you can access the tables in Redshift to begin querying the data
     
-    
 
-<div class='parent'>
- <div class='child float-left-child'><img width="500" height="200" src="aws_cred.jpg"></div>
- <div class='child float-left-child'><img width="500" height="200" src="redshift.jpg"></div>
-</div> 
 
