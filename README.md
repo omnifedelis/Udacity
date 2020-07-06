@@ -260,5 +260,8 @@ which are found in the dl.cfg file below.
     
     
 
-
+<div class='parent'>
+ <div class='child float-left-child'><img width="500" height="200" src="aws_cred.jpg"></div>
+ <div class='child float-left-child'><img width="500" height="200" src="redshift.jpg"></div>
+</div> 
 
