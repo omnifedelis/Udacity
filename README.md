@@ -4,7 +4,7 @@
 ## Intro
 ------
 The Data Engineering project below is based on a data gathered by Moosavi Sobhan, Mohammad Hossein Samavatian, Arnab Nandi, 
-Sinivasan Parthasarathy, and Rajiv Ramnath. I will be assimilating data from two csv files containing over 25.1 million  
+Sinivasan Parthasarathy, and Rajiv Ramnath. I will be assimilating data from two csv files containing over 25.1 million 
 accidents and 4.4 million weather related events into 4 tables which can be analyzed by Data Analyst or those seeking to learn about traffic and weather patterns in the US.
 The data seems to be updated once a year with the next update coming December 2020.
 
@@ -20,7 +20,9 @@ The purpose of this project is to apply what I have learned about Data Engineeri
 into a readable format that can be analyzed and processed. The data will be pulled from Amazon's S3 service into a EMR hadoop cluster to
 be processed by a Spark script which will load in the datasets, clean, and split the datasets into their appropriate tables. These newly 
 created tables will then be saved as parquet files, then loaded into their respective tables in Redshift. Airflow will be orchestrating the
-processes mentioned above. The reasons for choosing to handle the data in the way listed prior was to ease the memory load of my outdated pc.
+processes mentioned above.  
+  
+The reasons for choosing to handle the data in the way listed prior was to ease the memory load of my outdated pc.
 The pc itself could handle the smaller of the two files, but would run out of memory handling the larger file. The EMR Cluster is scalable in
 such a way that computers can be added to help with the work needed to be performed by the spark script. Another option would be to split the larger
 file into smaller bits then process the data that way. The last option I could think of would be to do away with Spark, EMR, and Airflow, and go with 
@@ -213,50 +215,103 @@ which are found in the dl.cfg file below.
 
     
 ## How To Use The Scripts (Assuming You Have Access To AWS)
-- Copy/Download Traffic and Accident data to Amazon S3 Bucket(bucket example *s3://bucket_name_here/input/* create an output and scripts folder as well) 
-- Copy/Download CAP_Spark_Wrangling.py to the *s3://bucket_name_here/scripts/* folder
-- Setup Amazon Redshift Cluster then once it starts up, copy the IAM ARN info and cluster Endpoint info under cluster properties tab
-- Setup Airflow on computer and download CAP_Dag.py, CAP_Create_tables.sql, and CAP_S3toRedshift.py in the following schema  
+1. Copy/Download Traffic and Accident data to Amazon S3 Bucket(bucket example *s3://bucket_name_here/input/* create an output and scripts folder as well)  
+      
+2. Copy/Download CAP_Spark_Wrangling.py to the *s3://bucket_name_here/scripts/* folder  
+      
+3. Setup Amazon Redshift Cluster then once it starts up, copy the IAM ARN info and cluster Endpoint info under cluster properties tab  
+      
+4. Setup Airflow on computer and download CAP_Dag.py, CAP_Create_tables.sql, and CAP_S3toRedshift.py in the following schema  
+      
+      
+    Udacity  
+      |  
+      └─capstone  
+      |---|     
+      |   └─airflow  
+      |       |  
+      |       └─dags  
+      |       |---|CAP_Dag.py  
+      |       |---|CAP_Create_tables.sql  
+      |       |  
+      |       └─plugins  
+      |       |---│  
+      |       |---└─operators  
+      |       |---|---|CAP_S3toRedshift.py  
+      |       |---|---|__init__.py  
+      |       |---|  
+      |       |---└─__init__.py  
+      |       └─CAP_EMR_Cluster_airflow_conn.json  
+      |       |  
+      |       └─CAP_Spark_Wrangling.py  
+      |  
+      └─Readme.md
+      |  
+      └─aws_cred.jpg  
+      |  
+      └─redshift.jpg  
+      |  
+      └─emr.jpg  
+      |  
+      └─dag_graph.jpg
     
-    airflow  
-    |                 
-    └---dags   
-    |----|CAP_Dag.py  
-    |----|CAP_Create_tables.sql   
-    |  
-    └---plugins   
-        │  
-        └───operators
-        |    |CAP_S3toRedshift.py  
-        |    |__init__.py
-        |  
-        |----|__init__.py
-- Open the CAP_Dag.py script and fill out the variables near the top with S3 bucket input, output, scripts folder location, and Redshift IAM Role info. Example below:  
+      
+5. Open the CAP_Dag.py script and fill out the variables near the top with S3 bucket input, output, scripts folder location, and Redshift IAM Role info. Example below:  
     
-    1. IAM_ROLE='arn:aws:iam::123456789012:role/iam-role'
-    2. INPUT = 's3a://bucket_name_here/input/'
-    3. OUTPUT ='s3a://bucket_name_here/output/'
-    4. SCRIPTS = 's3://bucket_name_here/scripts/'
-    5. S3_BUCKET = 'bucket_name_here/output'
-    
-- Launch Airflow and access user interface  
-- Access connections and create a new aws_credentials connection (*region name can be changed according to region you choose to use for redshift*) and redshift connection like the images below:  
+    - IAM_ROLE='arn:aws:iam::123456789012:role/iam-role'
+    - INPUT = 's3a://bucket_name_here/input/'
+    - OUTPUT ='s3a://bucket_name_here/output/'
+    - SCRIPTS = 's3://bucket_name_here/scripts/'
+    - S3_BUCKET = 'bucket_name_here/output'
+      
+6. Launch Airflow and access user interface  
+      
+7. Access connections and create a new aws_credentials connection (*region name can be changed according to region you choose to use for redshift*) and redshift connection like the images below:  
     
   <div align="center">
     <img width="400" height="500" src="aws_cred.jpg">
-  </div>
+  </div>  
+    
   <div align="center">
     <img width="400" height="500" src="redshift.jpg">
-  </div>
+  </div>  
     
--Next edit the EMR_Default connection by copying the json data in the CAP_EMR_Cluster_airflow_conn.json file and overwriting the info in the 'extra' space.
+    
+8.Next edit the EMR_Default connection by copying the json data in the CAP_EMR_Cluster_airflow_conn.json file and overwriting the info in the 'extra' space.  
+    
  
   <div align="center">
-    <img width="400" height="500" src="emr.jpg">
-  </div>
+    <img width="400" height="200" src="emr.jpg">
+  </div>  
+      
     
--Finally you go to the Dags page and turn Capstone_dag on and let it run until completion
--Once the dag has finished running, you can access the tables in Redshift to begin querying the data
+    
+10.Finally you go to the Dags page and turn Capstone_dag on and let it run until completion  
+    
+  <div align="center">
+    <img width="1000" height="600" src="dag_graph.jpg">
+  </div>    
+      
+    
+      
+11.Once the dag has finished running, you can access the tables in Redshift to begin querying the data
+    
     
 
+## Data Handling Under Different Scenarios  
+    
+1.If the data was increased by 100x  
+- You can adjust the number of Amazon EC2 instances available to an Amazon EMR cluster automatically or   
+    manually in response to workloads that have varying demands. To use automatic scaling, you have two options.  
+    You can enable EMR managed scaling or create a custom automatic scaling policy. Information on scaling can be   
+    found [here](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-scale-on-demand.html).
+  
+2.If the pipelines were run on a daily basis by 7am.  
+- Using Airflow allows me freedom to set a schedule for the times that I want pipelines to run given that the   
+    data is available to be processed at that time.
+  
+3.If the database needed to be accessed by 100+ people.  
+-  Redshift is currently able to handle a max of 500 connections and 50 concurrency per cluster. It supports   
+    auto-scaling and Workload management that optimizes query performance by allocating cluster resources to query queues.
+    
 
