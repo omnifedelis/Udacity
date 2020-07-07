@@ -223,7 +223,7 @@ which are found in the dl.cfg file below.
       
 4. Setup Airflow on computer and download CAP_Dag.py, CAP_Create_tables.sql, and CAP_S3toRedshift.py in the following schema  
       
-  <div align="center">
+  <div align="left">
     <img width="450" height="500" src="tree.jpg">
   </div>  
       
