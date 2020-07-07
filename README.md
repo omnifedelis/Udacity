@@ -227,20 +227,20 @@ which are found in the dl.cfg file below.
     Udacity  
       |  
       └─capstone  
-      |---|     
+      |   |     
       |   └─airflow  
       |       |  
       |       └─dags  
-      |       |---|CAP_Dag.py  
-      |       |---|CAP_Create_tables.sql  
+      |       |   |CAP_Dag.py  
+      |       |   |CAP_Create_tables.sql  
       |       |  
       |       └─plugins  
-      |       |---│  
-      |       |---└─operators  
-      |       |---|---|CAP_S3toRedshift.py  
-      |       |---|---|__init__.py  
-      |       |---|  
-      |       |---└─__init__.py  
+      |       |   │  
+      |       |   └─operators  
+      |       |   |   |CAP_S3toRedshift.py  
+      |       |   |   |__init__.py  
+      |       |   |  
+      |       |   └─__init__.py  
       |       └─CAP_EMR_Cluster_airflow_conn.json  
       |       |  
       |       └─CAP_Spark_Wrangling.py  
