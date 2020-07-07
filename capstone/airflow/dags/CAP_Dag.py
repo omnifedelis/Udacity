@@ -9,14 +9,15 @@ from airflow.contrib.sensors.emr_step_sensor import EmrStepSensor
 from operators import (StageToRedshiftOperator, DataQualityOperator)
 
 
-IAM_ROLE='arn:aws:iam::944264041230:role/dwhrole'
-INPUT='s3a://garcia-capstone/input/'
-OUTPUT='s3a://garcia-capstone/output/'
-SCRIPTS='s3://garcia-capstone/scripts/'
+IAM_ROLE='arn:aws:iam::123456789012:role/iam_role_name_here'
+INPUT='s3a://bucket_name_here/input/'
+OUTPUT='s3a://bucket_name_here//output/'
+SCRIPTS='s3://bucket_name_here//scripts/'
+S3_BUCKET='bucket_name_here/output'
 
 
 default_args = {
-    'owner': 'Garcia_Capstone_DE',
+    'owner': 'Dag_owner_here',
     'depends_on_past': False,
     'retries': 2,
     'retry_delay': timedelta(minutes=5),
@@ -24,7 +25,7 @@ default_args = {
     'start_date': datetime(2016, 1, 1),
 }
 
-dag = DAG('Capstone_dag',
+dag = DAG('Dag_name_here',
           default_args=default_args,
           description='Use Airflow to load and transform data with Spark and Query in Redshift',
           catchup=False,
@@ -125,7 +126,7 @@ accident_to_redshift = StageToRedshiftOperator(
     redshift_conn_id='redshift',
     aws_credentials_id='aws_credentials',
     table='accident',
-    s3_bucket='garcia-capstone/output',
+    s3_bucket=S3_BUCKET,
     s3_key='accident',
     iam_cred= IAM_ROLE,
     _format = 'PARQUET',
@@ -137,7 +138,7 @@ weather_to_redshift = StageToRedshiftOperator(
     redshift_conn_id='redshift',
     aws_credentials_id='aws_credentials',
     table='weather',
-    s3_bucket='garcia-capstone/output',
+    s3_bucket=S3_BUCKET,
     s3_key='weather',
     iam_cred= IAM_ROLE,
     _format = 'PARQUET',
@@ -149,7 +150,7 @@ location_to_redshift = StageToRedshiftOperator(
     redshift_conn_id='redshift',
     aws_credentials_id='aws_credentials',
     table='location',
-    s3_bucket='garcia-capstone/output',
+    s3_bucket=S3_BUCKET,
     s3_key='location',
     iam_cred= IAM_ROLE,
     _format = 'PARQUET',
@@ -161,7 +162,7 @@ time_to_redshift = StageToRedshiftOperator(
     redshift_conn_id='redshift',
     aws_credentials_id='aws_credentials',
     table='time',
-    s3_bucket='garcia-capstone/output',
+    s3_bucket=S3_BUCKET,
     s3_key='time',
     iam_cred= IAM_ROLE,
     _format = 'PARQUET',
