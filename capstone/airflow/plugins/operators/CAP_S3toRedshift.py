@@ -14,9 +14,12 @@ class StageToRedshiftOperator(BaseOperator):
         table: name of table to be copied from S3
         s3_bucket: Target S3 bucket holding project data
         s3_key: AWS Access and Secret Access Key
+        iam_cred: AWS Credentials for IAM ROLE
         region: Region S3 data is being held
         _format:Data format (CSV, JSON, Text)
+        csv: short cut for CSV format
         delimiter: Delimiting character if _format not used
+        extra_params: Additional parameters not shown which may be used for the Redshift Copy command
 
     """
 
@@ -41,7 +44,7 @@ class StageToRedshiftOperator(BaseOperator):
                  iam_cred = "",
                  region="",
                  _format="auto",
-                 csv="",
+                 csv="CSV",
                  delimiter=",",
                  extra_params = "",
                  *args, **kwargs):
