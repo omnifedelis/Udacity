@@ -219,11 +219,11 @@ which are found in the dl.cfg file below.
       
 2. Copy/Download CAP_Spark_Wrangling.py to the *s3://bucket_name_here/scripts/* folder  
       
-3. Setup Amazon Redshift Cluster then once it starts up, copy the IAM ARN info and cluster Endpoint info under cluster properties tab  
+3. Setup Amazon Redshift Cluster then once it starts up, copy the IAM ARN(*for Dag*) and cluster Endpoint(*for Host space in Airflow*) under cluster properties tab  
       
 4. Setup Airflow on computer and download CAP_Dag.py, CAP_Create_tables.sql, and CAP_S3toRedshift.py in the following schema  
       
-      
+'''     
     Udacity  
       |  
       └─capstone  
@@ -253,8 +253,8 @@ which are found in the dl.cfg file below.
       |  
       └─emr.jpg  
       |  
-      └─dag_graph.jpg
-    
+      └─dag_graph.jpg  
+'''   
       
 5. Open the CAP_Dag.py script and fill out the variables near the top with S3 bucket input, output, scripts folder location, and Redshift IAM Role info. Example below:  
     
@@ -281,7 +281,7 @@ which are found in the dl.cfg file below.
     
  
   <div align="center">
-    <img width="400" height="200" src="emr.jpg">
+    <img width="400" height="500" src="emr.jpg">
   </div>  
       
     
@@ -289,7 +289,7 @@ which are found in the dl.cfg file below.
 10.Finally you go to the Dags page and turn Capstone_dag on and let it run until completion  
     
   <div align="center">
-    <img width="1000" height="600" src="dag_graph.jpg">
+    <img width="1000" height="300" src="dag_graph.jpg">
   </div>    
       
     
