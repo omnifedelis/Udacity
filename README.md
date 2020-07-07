@@ -223,38 +223,9 @@ which are found in the dl.cfg file below.
       
 4. Setup Airflow on computer and download CAP_Dag.py, CAP_Create_tables.sql, and CAP_S3toRedshift.py in the following schema  
       
-'''     
-    Udacity  
-      |  
-      └─capstone  
-      |   |     
-      |   └─airflow  
-      |       |  
-      |       └─dags  
-      |       |   |CAP_Dag.py  
-      |       |   |CAP_Create_tables.sql  
-      |       |  
-      |       └─plugins  
-      |       |   │  
-      |       |   └─operators  
-      |       |   |   |CAP_S3toRedshift.py  
-      |       |   |   |__init__.py  
-      |       |   |  
-      |       |   └─__init__.py  
-      |       └─CAP_EMR_Cluster_airflow_conn.json  
-      |       |  
-      |       └─CAP_Spark_Wrangling.py  
-      |  
-      └─Readme.md
-      |  
-      └─aws_cred.jpg  
-      |  
-      └─redshift.jpg  
-      |  
-      └─emr.jpg  
-      |  
-      └─dag_graph.jpg  
-'''   
+  <div align="center">
+    <img width="450" height="500" src="tree.jpg">
+  </div>  
       
 5. Open the CAP_Dag.py script and fill out the variables near the top with S3 bucket input, output, scripts folder location, and Redshift IAM Role info. Example below:  
     
