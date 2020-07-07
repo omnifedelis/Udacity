@@ -198,8 +198,8 @@ def main():
 	Description: Arguments to be used in functions above
 	'''
 	spark       = create_spark_session()
-	input_data  = "s3a://garcia-capstone/input/"
-	output_data = "s3a://garcia-capstone/output/"
+	input_data  = "s3a://bucket_name_here/input/"
+	output_data = "s3a://bucket_name_here/output/"
 
 	process_all_data(spark, input_data, output_data)    
 
