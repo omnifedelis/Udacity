@@ -206,9 +206,7 @@ which are found in the dl.cfg file below.
     
 **CAP_EMR_Cluster_airflow_conn.json** - EMR Cluster configuration file to copied and pasted into Airflow EMR Default Config connection
  
-**CAP_S3toRedshift.py** - Script to copy S3 parquet files to Redshift
-
-**Cap_Schema.jpg**- Holds the Schema image used in the README.md file  
+**CAP_S3toRedshift.py** - Script to copy S3 parquet files to Redshift  
 
 **README.md**-provides discussion on the project.  
 
@@ -248,7 +246,8 @@ which are found in the dl.cfg file below.
   </div>  
     
     
-8.Next edit the EMR_Default connection by copying the json data in the CAP_EMR_Cluster_airflow_conn.json file and overwriting the info in the 'extra' space.  
+8.Next edit the EMR_Default connection by copying the json data in the CAP_EMR_Cluster_airflow_conn.json file and overwriting the info in the 'extra' space. Make sure to fill 
+in the space labeled LogUri with your EMR log path like so "LogUri": "s3://aws-logs-123456789012-us-west-2"", the number here is the same as the iam-role number
     
  
   <div align="center">
