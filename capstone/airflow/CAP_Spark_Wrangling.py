@@ -15,17 +15,21 @@ from pyspark.sql.types import TimestampType, StructType, StructField,\
 
 
 
-def create_spark_session():
-    '''
-    Initializes spark session and aws hadoop environment
-    '''
-    spark = SparkSession \
-        .builder \
-        .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
-        .getOrCreate()
-    return spark
+def create_spark_session():	
+	'''
+	Initializes spark session and aws hadoop environment
+	'''
+	spark = SparkSession \
+	    .builder \
+	    .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
+	    .getOrCreate()
+	return spark
 
 def update_header(headers):
+        '''
+	Updates column headers by removing parenthesis 
+	and replacing with underscore
+	'''
 	list=[]
 	for header in headers:
 		head=re.sub('[()]','_',header)
@@ -37,9 +41,9 @@ def process_all_data(spark, input_data, output_data):
 
 	'''
 	Description: 
-			imports S3 data into variable song_data
-			processes song_data into tables songs and artist,
-			then saves them to a new S3 path
+			imports S3 data into variables
+			processes accident and weather data into tables,
+			then saves them to S3 output_data path as parquet files
 
 	Arguments:
 			spark : spark session
