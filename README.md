@@ -215,7 +215,7 @@ which are found in the dl.cfg file below.
 ## How To Use The Scripts (Assuming You Have Access To AWS)
 1. Copy/Download Traffic and Accident data to Amazon S3 Bucket(bucket example *s3://bucket_name_here/input/* create an output and scripts folder as well)  
       
-2. Copy/Download CAP_Spark_Wrangling.py to the *s3://bucket_name_here/scripts/* folder  
+2. Copy/Download CAP_Spark_Wrangling.py to the *s3://bucket_name_here/scripts/* folder (*update bucket information at bottom of script first*)  
       
 3. Setup Amazon Redshift Cluster then once it starts up, copy the IAM ARN(*for Dag*) and cluster Endpoint(*for Host space in Airflow*) under cluster properties tab  
       
