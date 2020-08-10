@@ -1,0 +1,469 @@
+---
+title: "EDA_Project"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Candidate Contributions by Alejandro Garcia
+========================================================
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using in your analysis in this code
+# chunk.
+
+# Notice that the parameter "echo" was set to FALSE for this code chunk. This
+# prevents the code from displaying in the knitted HTML output. You should set
+# echo=FALSE for all code chunks in your file, unless it makes sense for your
+# report to show the code that generated a particular plot.
+
+# The other parameters for "message" and "warning" should also be set to FALSE
+# for other code chunks once you have verified that each plot comes out as you
+# want it to. This will clean up the flow of your report.
+
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(data.table)
+
+options(scipen = 5)
+```
+
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+fc <- read.csv('P00000001-TX.csv', row.names = NULL)
+#row.names shifts headers, this fixes it
+colnames(fc) <- c(colnames(fc)[-1],"x") 
+fc$x <- NULL
+
+```
+
+The following dataset is about the Financial contributions that took place 
+for the state of Texas during the 2016 election year. It contains data on 
+minor information on the contributors and the amounts they contributed to the 
+candidates as well as candidate names, commitee ids, and candidate ids.
+
+________________________________________________________________________________
+
+# Univariate Plots Section
+
+```{r echo=FALSE}
+#Structure 
+str(fc)
+```
+
+Structure of the dataset
+
+```{r echo=FALSE}
+#Dimension
+dim(fc)
+```
+
+Dataset dimensions
+
+```{r echo=FALSE}
+head(fc)
+tail(fc)
+# Gathers summary data on each cand_nm and gives contribution ranges per cand_nm
+with(fc, by(contb_receipt_amt,cand_nm , summary))
+```
+
+Head and tail data and contribution candidate summary
+
+```{r echo=FALSE, Univariate_Plot_Contribution_per_cand_count}
+qplot(data = fc, x = cand_nm, color= I('black')) +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+Contributions made to each candidate
+
+```{r echo=FALSE}
+#contribution amount brackets
+fc$contb_amt.bracket <- cut(fc$contb_receipt_amt, 
+                            breaks = c(-16601,0,200,500,1000,2000,15000), 
+                            labels = c('<0','0-200','201-500','501-1000',
+                                       '1001-2000','2001 >'))
+table(fc$contb_amt.bracket)
+```
+
+Contribution brackets
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plot_Brackets_Plot}
+ggplot(fc, aes(contb_amt.bracket)) + geom_histogram(stat = 'count')
+```
+
+A plot of the contribution amount brackets
+
+```{r echo=FALSE, Univariate_Plot_Whole_view_and_close_up}
+qplot(data = fc, x = contb_receipt_amt, color= I('black'),binwidth = 10) +
+  coord_cartesian(xlim = c(-1000, 1000)) +
+  scale_x_continuous(breaks = seq(-1000,1000,50)) +
+  theme(axis.text.x = element_text(angle = 45))
+
+qplot(data = fc, x = contb_receipt_amt, color= I('black'),binwidth = 10) +
+  coord_cartesian(xlim = c(-200, 200)) +
+  scale_x_continuous(breaks = seq(-200,200,50)) +
+  theme(axis.text.x = element_text(angle = 45))
+
+summary(fc$contb_receipt_amt)
+```
+
+Contribution Amount Summary and Charts
+
+```{r echo=FALSE}
+# Separate contb_receipt_dt into day, month, year
+fc<-separate(fc, "contb_receipt_dt", c("cont_day", "cont_month", "cont_year"), 
+             sep = "-")
+# Order months
+fc$cont_month<- ordered(fc$cont_month, levels= c('JAN', 'FEB','MAR','APR','MAY'
+                                                 ,'JUN','JUL','AUG','SEP','OCT'
+                                                 ,'NOV','DEC'))
+
+# Look at day,month, year frequency
+table(fc$cont_day)
+table(fc$cont_month)
+table(fc$cont_year)
+```
+
+Creation of contribution day, month, and year columns.
+
+```{r echo=FALSE, Univariate_Plot_Contribution_Days_Month_and_Year_view}
+qplot(data = fc, x = cont_day) +
+  facet_wrap(~cont_month, ncol=3,scales = 'free') +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+Contributions made per day split by month and containing all years.
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+The current structure of my dataset consist of 548,396 
+observations and 21 variables.
+
+### What is/are the main feature(s) of interest in your dataset?
+I am interested in finding the amount of contributions made to those 
+candidates running for the 2016 presidential elections in the state of TX.
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+cand_nam, contbr_nm, contb_receipt_amt, cont_day,month, and 
+contb_amt.bracket
+
+### Did you create any new variables from existing variables in the dataset?
+I had to create the cont_day, cont_month_, and cont_year which replaced the 
+contbr_receipt_dt. The contb_amt.bracket was also created to help reduce the 
+amount of bins needed to capture all of the dollar amounts contributed.
+
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+Of the features I investigated, I did not notice any unusual distributions. But
+I did notice that contbr_zip and contbr_city were not usable since some zip 
+codesand cities were made up or other countries.
+
+________________________________________________________________________________
+
+# Bivariate Plots Section
+
+
+
+```{r echo=FALSE, Bivariate_Plots_Boxplot_zoom_in}
+
+
+ggplot(fc, aes(cand_nm, contb_receipt_amt)) + 
+  geom_boxplot()+ scale_y_continuous(breaks = seq(-16800,16000,2000)) +
+  theme(axis.text.x = element_text(angle = 90)) # Full veiw 
+
+ggplot(fc, aes(cand_nm, contb_receipt_amt)) + 
+  geom_boxplot()+
+  scale_y_continuous(breaks = seq(-16800,16000,2000)) +
+  coord_cartesian(ylim = c(-5000,5000)) +
+  theme(axis.text.x = element_text(angle = 90)) #limited veiw
+
+ggplot(fc, aes(cand_nm, contb_receipt_amt)) + 
+  geom_boxplot()+
+   scale_y_continuous(breaks = seq(-16800,16000,200)) +
+  coord_cartesian(ylim = c(-200,3000)) +
+  theme(axis.text.x = element_text(angle = 90)) # capture quartiles
+```
+
+Zooming in on candidate contribution amounts
+
+```{r echo=FALSE}
+mean(fc$contb_receipt_amt)
+median(fc$contb_receipt_amt)
+summary(fc$contb_receipt_amt)
+```
+
+Contribution amount mean, median, and summary
+
+```{r echo=FALSE}
+sort(by(fc$contb_receipt_amt, fc$cand_nm, sum),decreasing = T)
+sort(by(fc$contbr_nm, fc$cand_nm, length), decreasing = T)
+```
+
+Contribution amounts by candidate and contributors count by candidate.
+
+```{r echo=FALSE}
+#Create the fc.sum data frame to capture the sum of contribution amounts and the
+# total number of contributors each candidate had....not unique, but total count
+fc.sum <-  fc %>% 
+  group_by(cand_nm) %>% 
+  summarise(
+    total_contb_amt = sum(contb_receipt_amt),
+    total_contb_ct = length(contbr_nm))
+# Sorts the total_contb_amt column from highest to lowest amount
+fc.sum$cand_nm <- factor(fc.sum$cand_nm, 
+                      levels = fc.sum$cand_nm[order(-fc.sum$total_contb_amt)])
+
+fc.sum
+```
+
+fc.sum Data all rows
+
+```{r echo=FALSE, Bivariate_Plots_Barplot_cand_contribution_and_contributors_ct}
+ggplot(aes(y=total_contb_amt, x=cand_nm), data=fc.sum) + 
+  geom_bar(stat= 'identity') + 
+  scale_y_continuous(breaks = seq(0,23e+7,2e+6)) +
+  theme(axis.text.x = element_text(angle = 90))
+
+ggplot(aes(y=total_contb_ct, x=cand_nm), data=fc.sum) + 
+  geom_bar(stat= 'identity') + 
+  theme(axis.text.x = element_text(angle = 90))
+
+```
+
+The barplot shows total contribution amounts in the first plot and total 
+contributors in the second plot
+
+```{r echo=FALSE, Bivariate_Plots_Total_contributions_by_month_all_years}
+ggplot(data = fc, aes(x=cont_day,y=sum(contb_receipt_amt))) + 
+  geom_bar(stat='identity')+ 
+  facet_wrap(~cont_month,scales = 'free_y')  + 
+  theme(axis.text.x = element_text(angle = 90))# sum of contb amt per day
+```
+
+Sum of contributions made each day by month and combined years
+
+```{r echo=FALSE, Bivariate_Plots_Number_contrib_made_on_each_day_combined}
+ggplot(fc, aes(cont_day,length(contbr_nm))) + 
+  geom_bar(stat = 'identity')
+```
+
+Number of contributions made on each day for all combined years
+
+
+# Bivariate Analysis
+
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+
+In this section I wanted to look at the amount of money a candadite received
+everyday for the two or three years where contributors donated money. I also 
+focused on the combined number of contributions in a month.
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+In this section I decided to create a new set of data that contained the 
+contribution amounts each candidated received and the amount of contributors.
+Althought Hillary Clintion did not win the election she had the highest amount
+of contributors with 203K and the highest contribution amount of $22.6 million.
+
+### What was the strongest relationship you found?
+
+Unfortuntaly I was unable to perform a cor test to find any strong correlations 
+between the data my dataset contained. The majority of my data is factor based
+and numerical values are needed to perform a cor test.
+
+________________________________________________________________________________
+
+# Multivariate Plots Section
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots_95_of_contb}
+qplot(data = fc, x = contb_receipt_amt, 
+      fill= contb_amt.bracket,
+      color = I('black'),
+      binwidth = 10) +
+  xlim(0, quantile(fc$contb_receipt_amt, 0.95)) +
+  coord_cartesian(xlim = c(0, 500)) 
+
+#of the contributions submitted, 95% of the amounts contributed are under $500
+```
+
+Plot showing 95% of the contributions made to all candidates
+
+```{r echo=FALSE, Contributions_less_than_or_equalto_500_dollars}
+with(subset(fc, contb_receipt_amt <=500 ),sum(contb_receipt_amt))
+```
+
+Sum of contributions less than or equal to $500
+
+```{r echo=FALSE, Contributions_less_than_or_equalto_2000_dollars}
+with(subset(fc, contb_receipt_amt <=2000 ),sum(contb_receipt_amt))
+```
+
+Sum of contributions less than or equal to $2000
+
+```{r echo=FALSE, Contributions_in_DEC_of_16}
+with(subset(fc, cont_month == 'DEC' & cont_year == '16' & contb_receipt_amt >0 ),sum(contb_receipt_amt))
+```
+
+Sum of contributions made in December of 2016
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots_contb_by_day}
+
+ggplot(fc, aes(cont_day,length(contbr_nm),color=cont_month)) + 
+  geom_bar(stat = 'identity')
+
+# number of contributors by day colored by month 
+```
+
+Number of contributors by day and colored by month
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots_Box_brackets}
+ggplot(data =subset(fc, cont_year =='16' & !contb_amt.bracket =='<0'), aes(x=cont_month,y=contb_receipt_amt,color = contb_amt.bracket)) + 
+  geom_boxplot() +
+  facet_wrap(~cont_year,ncol=1,scales = 'free_y')
+  #theme(axis.text.x = element_text(angle = 90))# sum of contb amt per day
+```
+
+Contribution amounts divided by months and contribution amount brackets
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots_Contb_month}
+ggplot(data = fc, aes(x=cont_day,y=sum(contb_receipt_amt), color= cont_year)) + 
+  geom_bar(stat='identity')+ 
+  facet_wrap(~cont_month,scales = 'free_y')  + 
+  theme(axis.text.x = element_text(angle = 90))# sum of contb amt per day
+```
+
+Total contributions made during each day, divided by months, and colored by year
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots_contrb_cand}
+ggplot(aes(y=total_contb_ct, x=cand_nm, fill=total_contb_amt), data=fc.sum) + 
+  geom_bar(stat= 'identity') + 
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+Contributions each candidate received during the 2016 election colored by amount
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+The contribution amounts began in 2013 with contribution amount picking up in 
+2015 and amounts sky rocketing in 2016. We observed that there were quite a few
+contributors in 2015 with the contributions picking up in November and December. 
+After the elections were over, a few contributors continued to contribute until
+late December 2016, over a month since the elections ended, thats also where we 
+can observe the majority of the contributions over $2001 occurring.
+
+### Were there any interesting or surprising interactions between features?
+
+95% of the contribution amounts were under $500 dollars which equate to 
+$26,654,520. As mentioned above during the month of December of 2016 
+$76994.23 was contributed to the campains.
+
+
+
+# Final Plots and Summary
+
+```{r echo=FALSE}
+# Creates a new table to help with pulling the dollar value with the highest ct
+DT <- data.table(fc$contb_receipt_amt)
+#stores sorted DT into a new data frame
+new_DT <- sort(table(DT), decreasing = T)
+
+head(new_DT)
+```
+
+The 5 highest dollar amount counts contributed to the 2016 election
+
+### Plot One
+```{r echo=FALSE, message=FALSE, warning=FALSE, Final_Plots_95_of_contb_final}
+qplot(data = fc, x = contb_receipt_amt, 
+   fill= contb_amt.bracket,
+   color = I('black'),binwidth = 10) +
+   xlab('Dollar Amounts Contributed') +
+   ylab('Count') + 
+   labs(title='Majority Contribution Amounts') +
+   theme(plot.title = element_text(hjust = 0.5)) +
+   scale_fill_discrete(name = 'Contribution\nBrackets') +
+   xlim(0, quantile(fc$contb_receipt_amt, 0.95))
+```
+
+### Description One
+
+Here we take a look at the contribution amounts by brackets. 95% of the 
+contribution amounts were under $500. There were over 80,000 contributions of 
+$25 made with the next highest contribution amount being $50 with a count of 
+69,794.
+
+### Plot Two
+```{r echo=FALSE, message=FALSE, warning=FALSE, Final_Plots_Contb_month_final}
+ggplot(data = fc, aes(x=cont_day,y=sum(contb_receipt_amt), color= cont_year)) + 
+  geom_bar(stat='identity')+ 
+  xlab('Day of Contribution') +
+  ylab('Contribution Amounts') + 
+  labs(title='Contribution by Day and Month') +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_discrete(name = 'Contribution Years') +
+  facet_wrap(~cont_month,scales = 'free_y')  + 
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Description Two
+
+This shows us a greater picture showing the total amount of money contributed
+per day, by month, and year. We can largly see that 2016 had the highest number
+of monetary contributions followed by 2015. The amounts donated during 2013 and 
+2014 are almost nonexistent on this chart.
+
+### Plot Three
+```{r echo=FALSE, message=FALSE, warning=FALSE, Final_Plots_contb_by_day_final}
+ggplot(fc, aes(cont_day,length(contbr_nm),color=cont_month)) + 
+  geom_bar(stat = 'identity') +
+  xlab('Contribution by Day') + 
+  ylab('Count of Contributors') +
+  labs(title='Total Amount of Contributors on a Given Day') +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_discrete(name = 'Contribution\nMonth')
+```
+
+### Description Three
+
+This shows the total number of contributions made on each day in a four year 
+period and colored by month. Each color block represents the number of 
+contributions made on that day.
+
+--------------------------------------------------------------------------------
+
+# Reflection
+
+So this was a pretting interesting data set to work with. It contained the 
+presidential election contribution information on the candidates and those
+who contributed to the campaigns. The dataset was based on the contributions 
+from the great state of Texas. Although the state of Texas itself is a mostly
+Republican state there was quite a surprise when I found that a Democrat won
+out on the number of contributions made and the total amount of contributions
+made. I did have a bit of trouble with the dataset itself though, it was mostly
+comprived of strings and factors unlike the daimonds dataset which makes it 
+easier to work with since it has a ton of numeric based data. The main variables
+used were cand_nm, contb_nm, contb_receipt_amt, cont_day, cont_month,cont_year,
+and contb_amt.bracket. If I were to work with this dataset again in the future
+I might try and divide candidates into their respective political groups.
+
