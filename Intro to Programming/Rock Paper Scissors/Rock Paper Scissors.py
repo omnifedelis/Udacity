@@ -121,29 +121,31 @@ class Game:
 
 
 if __name__ == '__main__':
+    # game = Game(HumanPlayer(), ReflectPlayer())
+    # game.play_game()
     modes = ["1", "rock", "2", "random", "3", "reflect", "4", "cycle"]
-    Intro = input("Welcome to Rock, Paper, Scissors\n would you like to play?"
+    Intro = input("Welcome to Rock, Paper, Scissors\n would you like to play? "
                   "Y or N > ")
-    if Intro == "Y" or 'y':
-        match = input('Which mode type do you want to play?\n Please enter'
+    if Intro == "Y" or Intro == 'y':
+
+        match = input('Which mode type do you want to play?\n Please enter '
                       'the number or mode: 1-rock, 2-random, 3-reflect, '
                       '4-cycle? > ')
-
         while match not in modes:
             print("I'm sorry, that is not a valid entry\n please try again")
             quit()
-        if match == '1' or 'rock':
-                game = Game(HumanPlayer(), Player())
-                game.play_game()
-        elif match == '2' or 'random':
-                game = Game(HumanPlayer(), RandomPlayer())
-                game.play_game()
-        elif match == '3' or 'reflect':
-                game = Game(HumanPlayer(), ReflectPlayer())
-                game.play_game()
-        elif match == '4' or 'cycle':
-                game = Game(HumanPlayer(), CyclePlayer())
-                game.play_game()
-    elif Intro == 'N' or 'n':
+        if match == '1' or match == 'rock':
+            game = Game(HumanPlayer(), Player())
+            game.play_game()
+        elif match == '2' or match == 'random':
+            game = Game(HumanPlayer(), RandomPlayer())
+            game.play_game()
+        elif match == '3' or match == 'reflect':
+            game = Game(HumanPlayer(), ReflectPlayer())
+            game.play_game()
+        elif match == '4' or match == 'cycle':
+            game = Game(HumanPlayer(), CyclePlayer())
+            game.play_game()
+    elif Intro == 'N' or Intro == 'n':
         print("Maybe next time")
         quit()
