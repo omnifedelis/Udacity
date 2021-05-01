@@ -27,7 +27,7 @@ class RandomPlayer(Player):
 class HumanPlayer(Player):
     # Allows for human interaction
     def move(self):
-        move = (input("Enter your move > "))
+        move = (input("Enter your move > ").lower())
         while move not in moves:
             move = input("Please Pick from rock, paper, scissors > ")
         return move
@@ -92,16 +92,16 @@ class Game:
         # if move1 matches move2,skip. if move1 beats move2 add point
         # to player1, else add pt to player2
         if move1 == move2:
-            print(f"Score: Player One {self.score1}, Player Two {self.score2}")
             print("Round TIED!!!")
+            print(f"Score: Player One {self.score1}, Player Two {self.score2}")
         elif beats(move1, move2):
             self.score1 += 1
-            print(f"Score: Player One {self.score1}, Player Two {self.score2}")
             print("Player 1 wins round!!!")
+            print(f"Score: Player One {self.score1}, Player Two {self.score2}")
         else:
             self.score2 += 1
-            print(f"Score: Player One {self.score1}, Player Two {self.score2}")
             print("Player 2 wins round")
+            print(f"Score: Player One {self.score1}, Player Two {self.score2}")
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
 
@@ -125,12 +125,12 @@ if __name__ == '__main__':
     # game.play_game()
     modes = ["1", "rock", "2", "random", "3", "reflect", "4", "cycle"]
     Intro = input("Welcome to Rock, Paper, Scissors\n would you like to play? "
-                  "Y or N > ")
-    if Intro == "Y" or Intro == 'y':
+                  "Y or N > ").lower()
+    if Intro == 'y':
 
         match = input('Which mode type do you want to play?\n Please enter '
                       'the number or mode: 1-rock, 2-random, 3-reflect, '
-                      '4-cycle? > ')
+                      '4-cycle? > ').lower()
         while match not in modes:
             print("I'm sorry, that is not a valid entry\n please try again")
             quit()
@@ -146,6 +146,6 @@ if __name__ == '__main__':
         elif match == '4' or match == 'cycle':
             game = Game(HumanPlayer(), CyclePlayer())
             game.play_game()
-    elif Intro == 'N' or Intro == 'n':
+    elif Intro == 'n':
         print("Maybe next time")
         quit()
